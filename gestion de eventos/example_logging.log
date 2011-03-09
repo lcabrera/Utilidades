@@ -1,10 +1,10 @@
-20110803 22:57 nivel1 example_logging.py(27) (MainThread - 2653): DEBUG debug message
-20110803 22:57 nivel1 example_logging.py(28) (MainThread - 2653): INFO info message
-20110803 22:57 nivel1 example_logging.py(29) (MainThread - 2653): WARNING warn message
-20110803 22:57 nivel1 example_logging.py(30) (MainThread - 2653): ERROR error message
-20110803 22:57 nivel1 example_logging.py(31) (MainThread - 2653): CRITICAL critical message
-20110803 22:57 nivel2 example_logging.py(36) (MainThread - 2653): DEBUG debug message 2
-20110803 22:57 nivel2 example_logging.py(37) (MainThread - 2653): INFO info message 2
-20110803 22:57 nivel2 example_logging.py(38) (MainThread - 2653): WARNING warn message 2
-20110803 22:57 nivel2 example_logging.py(39) (MainThread - 2653): ERROR error message 2
-20110803 22:57 nivel2 example_logging.py(40) (MainThread - 2653): CRITICAL critical message 2
+20110903 00:07 nivel1 /home/lcabrera/Proyectos/git/Utilidades/gestion de eventos/example_logging.py(27) (MainThread - 6121): DEBUG debug message
+20110903 00:07 nivel1 /home/lcabrera/Proyectos/git/Utilidades/gestion de eventos/example_logging.py(28) (MainThread - 6121): INFO info message
+20110903 00:07 nivel1 /home/lcabrera/Proyectos/git/Utilidades/gestion de eventos/example_logging.py(29) (MainThread - 6121): WARNING warn message
+20110903 00:07 nivel1 /home/lcabrera/Proyectos/git/Utilidades/gestion de eventos/example_logging.py(30) (MainThread - 6121): ERROR error message
+20110903 00:07 nivel1 /home/lcabrera/Proyectos/git/Utilidades/gestion de eventos/example_logging.py(31) (MainThread - 6121): CRITICAL critical message
+20110903 00:07 nivel2 /home/lcabrera/Proyectos/git/Utilidades/gestion de eventos/example_logging.py(36) (MainThread - 6121): DEBUG debug message 2
+20110903 00:07 nivel2 /home/lcabrera/Proyectos/git/Utilidades/gestion de eventos/example_logging.py(37) (MainThread - 6121): INFO info message 2
+20110903 00:07 nivel2 /home/lcabrera/Proyectos/git/Utilidades/gestion de eventos/example_logging.py(38) (MainThread - 6121): WARNING warn message 2
+20110903 00:07 nivel2 /home/lcabrera/Proyectos/git/Utilidades/gestion de eventos/example_logging.py(39) (MainThread - 6121): ERROR error message 2
+20110903 00:07 nivel2 /home/lcabrera/Proyectos/git/Utilidades/gestion de eventos/example_logging.py(40) (MainThread - 6121): CRITICAL critical message 2

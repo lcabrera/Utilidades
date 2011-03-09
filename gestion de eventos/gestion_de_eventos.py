@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 # vim:fileencoding=utf-8
@@ -37,6 +37,7 @@ __copyright__ = 'Copyright (c) 2010 Luis Cabrera Sauco'
 __license__ = 'GPL'
 __file__ = '$Id: $'
 __source__ = '$Source: $'
+
 # Redefiniendo la documentación:
 # __doc__ = 'Clase de ejemplo'
 
@@ -48,18 +49,22 @@ __source__ = '$Source: $'
 
 # Variables:
 
+
 class Ejemplo:
 
-    """Clase que implementa los métodos necesarios para ...
+    """
+    Clase que implementa los métodos necesarios para ...
     """
 
     def __init__(self):
-        """MéŘtodo inicial de la clase. Se ejecuta al carga la clase.
+        """
+        Método inicial de la clase. Se ejecuta al carga la clase.
         """
 
         # importación de módulos
         import os
         import sys
+
         # import logging
         import logging.config
 
@@ -72,62 +77,46 @@ class Ejemplo:
         param = 0
         param = param + 1
 
+        if len(sys.argv) == int(param):
+            print 'Se han recibido %s argumentos.' % len(sys.argv)
+            print 'Es lo correcto. Seguimos.'
+        else:
+            print 'Se han recibido %s argumentos.' % len(sys.argv)
+            print 'Estos argumentos son: %s' % sys.argv
+            print '\nRedirigir a la función USAGE.\n'
+            sys.stderr.write('''\tArgumentos inválidos\n\n''')
+            sys.exit(1)
+
         nombre_base = os.path.basename(os.path.splitext(sys.argv[0])[0])
         filename_log = nombre_base + '.log'
-        filename_log_conf = nombre_base + '_logging.conf'
+        filename_log_ini = nombre_base + '_logging.ini'
+        log_nivel1 = 'nivel1'
 
-        # Nivel de depuración:
-        self.nivel = {
-            'debug': logging.DEBUG,
-            'info': logging.INFO,
-            'warning': logging.WARNING,
-            'error': logging.ERROR,
-            'critical': logging.CRITICAL}
+        logging.config.fileConfig(filename_log_ini)
 
-        # print dir(self.nivel)
-        # print type(self.nivel)
-        # print type(sys.argv)
-        # print sys.argv
+        # creamos un logger
+        logger = logging.getLogger(log_nivel1)
 
         # Declaramos algunas variables iniciales.
         self.var_a = ''
         self.var_b = []
         self.nombre = ''
 
-        if (os.path.exists(filename_log_conf) and os.path.isfile(filename_log_conf)):
-            logging.config.fileConfig(filename_log_conf)
+        if os.path.exists(filename_log_ini) and os.path.isfile(filename_log_ini):
+            logging.config.fileConfig(filename_log_ini)
+            logging.debug('Usaremos el fichero %s para el registro de eventos' % filename_log_ini)
         else:
-            sys.stderr.write('\n\tNo existe el archivo de configuración del log: %s\n\n' % filename_log_conf)
+            logging.error('No ha sido posible encontrar el fichero de configuración del registro.')
+            sys.stderr.write('''\n\tNo existe el archivo de configuración del log: %s\n''' % filename_log_ini)
             sys.exit(1)
 
-        #logging.basicConfig(
-        #            level=self.nivel['debug'],
-        #            format='%(asctime)s %(levelname)-8s %(message)s',
-        #            datefmt='%a, %d %b %Y %H:%M:%S',
-        #            filename=filename_log,
-        #            filemode='w')
-
-        # create logger
-        logger = logging.getLogger(nombre_base)
-
-        # Entradas de ejemplo:
         logging.debug('This is a debug message (10)')
         logging.info('This is an info message (20)')
         logging.warning('This is a warning message (30)')
         logging.error('This is an error message (40)')
         logging.critical('This is a critical error message (50)')
 
-        if len(sys.argv) == int(param):
-            print 'Se han recibido %s argumentos.' % (len(sys.argv))
-            print 'Es lo correcto. Seguimos.'
-        else:
-            print 'Se han recibido %s argumentos.' % (len(sys.argv))
-            print 'Estos argumentos son: %s' % (sys.argv)
-            print 'Redirigir a la función USAGE.'
-            sys.stderr.write('\n\tArgumentos inválidos\n\n')
-            sys.exit(1)
-
-        print 'Entrando a la clase ejemplo().'
+        logging.debug('Class::__init__: Entrando a la clase ejemplo().')
 
     def __del__(self):
         """Este metodo se invoca cuando se destruye la clase

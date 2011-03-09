@@ -1,0 +1,7 @@
+20110903 00:38 root gestion_de_eventos.py(107) (MainThread - 29146): DEBUG Usaremos el fichero gestion_de_eventos_logging.ini para el registro de eventos
+20110903 00:38 root gestion_de_eventos.py(113) (MainThread - 29146): DEBUG This is a debug message (10)
+20110903 00:38 root gestion_de_eventos.py(114) (MainThread - 29146): INFO This is an info message (20)
+20110903 00:38 root gestion_de_eventos.py(115) (MainThread - 29146): WARNING This is a warning message (30)
+20110903 00:38 root gestion_de_eventos.py(116) (MainThread - 29146): ERROR This is an error message (40)
+20110903 00:38 root gestion_de_eventos.py(117) (MainThread - 29146): CRITICAL This is a critical error message (50)
+20110903 00:38 root gestion_de_eventos.py(119) (MainThread - 29146): DEBUG Class::__init__: Entrando a la clase ejemplo().
