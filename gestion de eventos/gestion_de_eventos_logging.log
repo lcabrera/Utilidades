@@ -1,29 +1,47 @@
-20110310 15:12:15 (Thursday) INFO Usaremos el fichero gestion_de_eventos_logging.ini para el registro de eventos
-20110310 15:12:15 (Thursday) DEBUG This is a debug message (10)
-20110310 15:12:15 (Thursday) INFO This is an info message (20)
-20110310 15:12:15 (Thursday) WARNING This is a warning message (30)
-20110310 15:12:15 (Thursday) ERROR This is an error message (40)
-20110310 15:12:15 (Thursday) CRITICAL This is a critical error message (50)
-20110310 15:12:15 (Thursday) DEBUG Class::__init__: Entrando a la clase ejemplo().
-20110310 15:12:15 (Thursday) DEBUG Class::metodo_de_ejemplo: Entrando en el metodo_de_ejemplo().
-20110310 15:12:15 (Thursday) DEBUG Class::metodo_de_ejemplo: Saliendo del metodo_de_ejemplo().
-20110310 15:12:15 (Thursday) DEBUG Class::__del__: Entrando en la clase.
-20110310 15:12:15 (Thursday) DEBUG Class::__del__: Saliendo de la clase.
-20110310 16:15:35 (Thursday) INFO Usaremos el fichero gestion_de_eventos_logging.ini para el registro de eventos
-20110310 16:15:35 (Thursday) DEBUG This is a debug message (10)
-20110310 16:15:35 (Thursday) INFO This is an info message (20)
-20110310 16:15:35 (Thursday) WARNING This is a warning message (30)
-20110310 16:15:35 (Thursday) ERROR This is an error message (40)
-20110310 16:15:35 (Thursday) CRITICAL This is a critical error message (50)
-20110310 16:15:35 (Thursday) DEBUG Class::__init__: Entrando a la clase ejemplo().
-20110310 16:15:35 (Thursday) DEBUG Class::metodo_de_ejemplo: Entrando en el metodo_de_ejemplo().
-20110310 16:15:35 (Thursday) DEBUG Class::metodo_de_ejemplo: Saliendo del metodo_de_ejemplo().
-20110310 16:22:07 (Thursday) INFO Usaremos el fichero gestion_de_eventos_logging.ini para el registro de eventos
-20110310 16:22:07 (Thursday) DEBUG TEST: This is a debug message (10)
-20110310 16:22:07 (Thursday) INFO TEST: This is an info message (20)
-20110310 16:22:07 (Thursday) WARNING TEST: This is a warning message (30)
-20110310 16:22:07 (Thursday) ERROR TEST: This is an error message (40)
-20110310 16:22:07 (Thursday) CRITICAL TEST: This is a critical error message (50)
-20110310 16:22:07 (Thursday) DEBUG Class::__init__: Entrando a la clase ejemplo().
-20110310 16:22:07 (Thursday) DEBUG Class::metodo_de_ejemplo: Entrando en el metodo_de_ejemplo().
-20110310 16:22:07 (Thursday) DEBUG Class::metodo_de_ejemplo: Saliendo del metodo_de_ejemplo().
+20110311 20:41:59 (Friday) DEBUG Class::metodo_de_ejemplo: Entrando en el metodo_de_ejemplo().
+20110311 20:41:59 (Friday) DEBUG Class::metodo_de_ejemplo: Saliendo del metodo_de_ejemplo().
+20110311 20:42:10 (Friday) INFO Usaremos el fichero gestion_de_eventos_logging.ini para el registro de eventos
+20110311 20:42:10 (Friday) DEBUG TEST: This is a debug message (10)
+20110311 20:42:10 (Friday) INFO TEST: This is an info message (20)
+20110311 20:42:10 (Friday) WARNING TEST: This is a warning message (30)
+20110311 20:42:10 (Friday) ERROR TEST: This is an error message (40)
+20110311 20:42:10 (Friday) CRITICAL TEST: This is a critical error message (50)
+20110311 20:42:10 (Friday) DEBUG Class::__init__: Entrando a la clase ejemplo().
+20110311 20:42:10 (Friday) DEBUG Class::metodo_de_ejemplo: Entrando en el metodo_de_ejemplo().
+20110311 20:42:10 (Friday) DEBUG Class::metodo_de_ejemplo: Saliendo del metodo_de_ejemplo().
+20110311 20:42:49 (Friday) INFO Usaremos el fichero gestion_de_eventos_logging.ini para el registro de eventos
+20110311 20:42:49 (Friday) DEBUG TEST: This is a debug message (10)
+20110311 20:42:49 (Friday) INFO TEST: This is an info message (20)
+20110311 20:42:49 (Friday) WARNING TEST: This is a warning message (30)
+20110311 20:42:49 (Friday) ERROR TEST: This is an error message (40)
+20110311 20:42:49 (Friday) CRITICAL TEST: This is a critical error message (50)
+20110311 20:42:49 (Friday) DEBUG Class::__init__: Entrando a la clase ejemplo().
+20110311 20:42:49 (Friday) DEBUG Class::metodo_de_ejemplo: Entrando en el metodo_de_ejemplo().
+20110311 20:42:49 (Friday) DEBUG Class::metodo_de_ejemplo: Saliendo del metodo_de_ejemplo().
+20110311 20:42:56 (Friday) INFO Usaremos el fichero gestion_de_eventos_logging.ini para el registro de eventos
+20110311 20:42:56 (Friday) DEBUG TEST: This is a debug message (10)
+20110311 20:42:56 (Friday) INFO TEST: This is an info message (20)
+20110311 20:42:56 (Friday) WARNING TEST: This is a warning message (30)
+20110311 20:42:56 (Friday) ERROR TEST: This is an error message (40)
+20110311 20:42:56 (Friday) CRITICAL TEST: This is a critical error message (50)
+20110311 20:42:56 (Friday) DEBUG Class::__init__: Entrando a la clase ejemplo().
+20110311 20:42:56 (Friday) DEBUG Class::metodo_de_ejemplo: Entrando en el metodo_de_ejemplo().
+20110311 20:42:56 (Friday) DEBUG Class::metodo_de_ejemplo: Saliendo del metodo_de_ejemplo().
+20110311 20:46:57 (Friday) INFO Usaremos el fichero gestion_de_eventos_logging.ini para el registro de eventos
+20110311 20:46:57 (Friday) DEBUG TEST: This is a debug message (10)
+20110311 20:46:57 (Friday) INFO TEST: This is an info message (20)
+20110311 20:46:57 (Friday) WARNING TEST: This is a warning message (30)
+20110311 20:46:57 (Friday) ERROR TEST: This is an error message (40)
+20110311 20:46:57 (Friday) CRITICAL TEST: This is a critical error message (50)
+20110311 20:46:57 (Friday) DEBUG Class::__init__: Entrando a la clase ejemplo().
+20110311 20:46:57 (Friday) DEBUG Class::metodo_de_ejemplo: Entrando en el metodo_de_ejemplo().
+20110311 20:46:57 (Friday) DEBUG Class::metodo_de_ejemplo: Saliendo del metodo_de_ejemplo().
+20110311 20:49:09 (Friday) INFO Usaremos el fichero gestion_de_eventos_logging.ini para el registro de eventos
+20110311 20:49:09 (Friday) DEBUG TEST: This is a debug message (10)
+20110311 20:49:09 (Friday) INFO TEST: This is an info message (20)
+20110311 20:49:09 (Friday) WARNING TEST: This is a warning message (30)
+20110311 20:49:09 (Friday) ERROR TEST: This is an error message (40)
+20110311 20:49:09 (Friday) CRITICAL TEST: This is a critical error message (50)
+20110311 20:49:09 (Friday) DEBUG Class::__init__: Entrando a la clase ejemplo().
+20110311 20:49:09 (Friday) DEBUG Class::metodo_de_ejemplo: Entrando en el metodo_de_ejemplo().
+20110311 20:49:09 (Friday) DEBUG Class::metodo_de_ejemplo: Saliendo del metodo_de_ejemplo().

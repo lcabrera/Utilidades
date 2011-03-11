@@ -77,17 +77,17 @@ class Ejemplo:
         # Si no pasamos parametros de ningún tipo, la llamada al programa recibe
         # al menos el envio del nombre del fichero. Por eso hay que sumar uno a
         # esta función.
-        param = 1
-        param = param + 1
+        param = 0
+        #param = param + 1
 
-        if len(sys.argv) == int(param):
-            print 'Se han recibido %s argumentos.' % len(sys.argv)
-            print 'Es lo correcto. Seguimos.'
-        else:
-            print 'Se han recibido %s argumentos.' % len(sys.argv)
-            print 'Estos argumentos son: %s' % sys.argv
-            sys.stderr.write('\t' + str(self.usage()) + '\n\n')
-            sys.exit(1)
+        #if len(sys.argv) == int(param):
+        #    print 'Se han recibido %s argumentos.' % len(sys.argv)
+        #    print 'Es lo correcto. Seguimos.'
+        #else:
+        #    print 'Se han recibido %s argumentos.' % len(sys.argv)
+        #    print 'Estos argumentos son: %s' % sys.argv
+        #    sys.stderr.write('\t' + str(self.usage()) + '\n\n')
+        #    sys.exit(1)
 
         parser = optparse.OptionParser("usage: %prog [options] arg1 arg2")
         parser.add_option(
@@ -113,16 +113,22 @@ class Ejemplo:
             )
 
         (options, args) = parser.parse_args()
-        if len(args) != 2:
-            parser.error("incorrect number of arguments")
+
+        if len(args) > 0:
+            print 'Se han recibido %s parámetros: %s' % (len(args), options)
+            if len(args) != param:
+                parser.error("Se ha recibido un número incorrecto de parámetros.\n\n\tSe han recibido exactamente %s parámetros.\n\n" % (param))
+        else:
+            print 'No se han pasado parámetros en la llamada de la app.'
 
         hostname = options.hostname
         portnum = options.portnum
+        version = options.version
 
         (options, remainder) = parser.parse_args()
+        print 'HOST      :', hostname
+        print 'PUERTO    :', portnum
         print 'VERSION   :', options.version
-        print 'PUERTO    :', options.portnum
-        print 'HOST      :', options.hostname
         print 'REMAINING :', remainder
 
         nombre_base = os.path.basename(os.path.splitext(sys.argv[0])[0])
