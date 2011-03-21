@@ -1,0 +1,371 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+#
+# urlwatch is a minimalistic URL watcher written in Python
+#
+# Copyright (c) 2008-2011 Thomas Perl <thp.io/about>
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+
+"""Watch web pages and arbitrary URLs for changes"""
+
+PKGNAME = 'urlwatch'
+
+__author__ = 'Thomas Perl <m@thp.io>'
+__copyright__ = 'Copyright 2008-2011 Thomas Perl'
+__license__ = 'BSD'
+__homepage__ = 'http://thp.io/2008/urlwatch/'
+__version__ = '1.12'
+
+USER_AGENT = '%s/%s (+http://thp.io/2008/urlwatch/info.html)' \
+    % (PKGNAME, __version__)
+
+# Configuration section
+
+DISPLAY_ERRORS = True
+LINE_LENGTH = 75
+
+# File and folder paths
+
+import sys
+import os.path
+
+URLWATCH_DIR = os.path.expanduser(os.path.join('~', '.' + PKGNAME))
+URLS_TXT = os.path.join(URLWATCH_DIR, 'urls.txt')
+CACHE_DIR = os.path.join(URLWATCH_DIR, 'cache')
+SCRIPTS_DIR = os.path.join(URLWATCH_DIR, 'lib')
+HOOKS_PY = os.path.join(SCRIPTS_DIR, 'hooks.py')
+
+# Check if we are installed in the system already
+
+(PREFIX, BINDIR) = \
+    os.path.split(os.path.dirname(os.path.abspath(sys.argv[0])))
+
+if BINDIR == 'bin':
+
+    # Assume we are installed in system
+
+    EXAMPLES_DIR = os.path.join(PREFIX, 'share', PKGNAME, 'examples')
+else:
+
+    # Assume we are not yet installed
+
+    EXAMPLES_DIR = os.path.join(PREFIX, BINDIR, 'examples')
+    sys.path.append(os.path.join(PREFIX, BINDIR, 'lib'))
+
+URLS_TXT_EXAMPLE = os.path.join(EXAMPLES_DIR, 'urls.txt.example')
+HOOKS_PY_EXAMPLE = os.path.join(EXAMPLES_DIR, 'hooks.py.example')
+
+# Code section
+
+import shutil
+import os
+import stat
+import urllib2
+import httplib
+import email
+import email.Utils
+import time
+import socket
+import difflib
+import datetime
+import optparse
+import logging
+import imp
+
+from email import Utils
+from urlwatch import handler
+
+# One minute (=60 seconds) timeout for each request to avoid hanging
+
+socket.setdefaulttimeout(60)
+
+LOG = logging.getLogger(PKGNAME)
+LOG.setLevel(logging.DEBUG)
+
+
+class NullHandler(logging.Handler):
+    '''Null comment...'''
+
+    def emit(self, record):
+        '''Null comment...'''
+
+        pass
+
+
+LOG.addHandler(NullHandler())
+
+
+def foutput(
+    type,
+    url,
+    content=None,
+    summary=None,
+    c='*',
+    n=LINE_LENGTH,
+    ):
+    """Format output messages
+
+    Returns a snippet of a specific message type (i.e. 'changed') for
+    a specific URL and an optional (possibly multi-line) content.
+
+    The parameter "summary" (if specified) should be a list variable
+    that gets one item appended for the summary of the changes.
+
+    The return value is a list of strings (one item per line).
+    """
+
+    summary_txt = ': '.join((type.upper(), str(url)))
+
+    if SUMMARY is not None:
+        if content is None:
+            SUMMARY.append(summary_txt)
+        else:
+            SUMMARY.append('%s (%d bytes)' % (summary_txt,
+                           len(str(content))))
+
+    result = [c * n, summary_txt]
+    if content is not None:
+        result += [c * n, str(content)]
+    result += [c * n, '', '']
+
+    return result
+
+
+if __name__ == '__main__':
+    START = datetime.datetime.now()
+
+    # Option parser
+
+    PARSER = optparse.OptionParser(usage='''%%prog [options]
+
+%s'''
+                                   % __doc__.strip(), version=PKGNAME
+                                   + ' ' + __version__)
+    PARSER.add_option('-v', '--verbose', action='store_true',
+                      dest='verbose', help='Show debug/log output')
+    PARSER.add_option('', '--urls', dest='urls', metavar='FILE',
+                      help='Read URLs from the specified file')
+    PARSER.add_option('', '--hooks', dest='hooks', metavar='FILE',
+                      help='Use specified file as hooks.py module')
+    PARSER.add_option('-e', '--display-errors', action='store_true',
+                      dest='DISPLAY_ERRORS',
+                      help='Include HTTP errors (404, etc..) in the output'
+                      )
+
+    PARSER.set_defaults(verbose=False, DISPLAY_ERRORS=False)
+
+    (OPTIONS, ARGS) = PARSER.parse_args(sys.argv)
+
+    if OPTIONS.verbose:
+
+        # Enable logging to the console
+
+        CONSOLE = logging.StreamHandler()
+        CONSOLE.setLevel(logging.DEBUG)
+        FORMATTER = \
+            logging.Formatter('%(asctime)s %(levelname)s: %(message)s')
+        CONSOLE.setFormatter(FORMATTER)
+        LOG.addHandler(CONSOLE)
+        LOG.info('turning on verbose logging mode')
+
+    if OPTIONS.DISPLAY_ERRORS:
+        LOG.info('turning display of errors ON')
+        DISPLAY_ERRORS = True
+
+    if OPTIONS.urls:
+        if os.path.isfile(OPTIONS.urls):
+            URLS_TXT = OPTIONS.urls
+            LOG.info('using %s as urls.txt' % OPTIONS.urls)
+        else:
+            LOG.error('%s is not a file' % OPTIONS.urls)
+            print 'Error: %s is not a file' % OPTIONS.urls
+            sys.exit(1)
+
+    if OPTIONS.hooks:
+        if os.path.isfile(OPTIONS.hooks):
+            HOOKS_PY = OPTIONS.hooks
+            LOG.info('using %s as hooks.py' % OPTIONS.hooks)
+        else:
+            LOG.error('%s is not a file' % OPTIONS.hooks)
+            print 'Error: %s is not a file' % OPTIONS.hooks
+            sys.exit(1)
+
+    # Created all needed folders
+
+    for needed_dir in (URLWATCH_DIR, CACHE_DIR, SCRIPTS_DIR):
+        if not os.path.isdir(needed_dir):
+            os.makedirs(needed_dir)
+
+    # Check for required files
+
+    if not os.path.isfile(URLS_TXT):
+        LOG.warning('not a file: %s' % URLS_TXT)
+        URLS_TXT_FN = os.path.join(os.path.dirname(URLS_TXT),
+                                   os.path.basename(URLS_TXT_EXAMPLE))
+        HOOKS_PY_FN = os.path.join(os.path.dirname(HOOKS_PY),
+                                   os.path.basename(HOOKS_PY_EXAMPLE))
+        print 'Error: You need to create a urls.txt file first.'
+        print ''
+        print 'Place it in %s' % URLS_TXT
+        print 'An example is available in %s' % URLS_TXT_FN
+        print ''
+        if not OPTIONS.hooks:
+            print 'You can also create %s' % HOOKS_PY
+            print 'An example is available in %s' % HOOKS_PY_FN
+            print ''
+        if os.path.exists(URLS_TXT_EXAMPLE) \
+            and not os.path.exists(URLS_TXT_FN):
+            shutil.copy(URLS_TXT_EXAMPLE, URLS_TXT_FN)
+        if not OPTIONS.hooks and os.path.exists(HOOKS_PY_EXAMPLE) \
+            and not os.path.exists(HOOKS_PY_FN):
+            shutil.copy(HOOKS_PY_EXAMPLE, HOOKS_PY_FN)
+        sys.exit(1)
+
+    HEADERS = {'User-agent': USER_AGENT}
+
+    SUMMARY = []
+    DETAILS = []
+    COUNT = 0
+
+    if os.path.exists(HOOKS_PY):
+        LOG.info('using hooks.py from %s' % HOOKS_PY)
+        HOOKS = imp.load_source('hooks', HOOKS_PY)
+        if hasattr(HOOKS, 'filter'):
+            LOG.info('found and enabled filter function from hooks.py')
+            FILTER = HOOKS.filter
+        else:
+            LOG.warning('hooks.py has no filter function - ignoring')
+            FILTER = lambda x, y: y
+    else:
+        LOG.info('not using hooks.py (file not found)')
+        FILTER = lambda x, y: y
+
+    for job in handler.parse_urls_txt(URLS_TXT):
+        LOG.info('processing job: %s' % job.location)
+        filename = os.path.join(CACHE_DIR, job.get_guid())
+        try:
+            if os.path.exists(filename):
+                st = os.stat(filename)
+                timestamp = st[stat.ST_MTIME]
+            else:
+                timestamp = None
+
+            # Retrieve the data
+
+            data = job.retrieve(timestamp, FILTER, HEADERS)
+
+            if os.path.exists(filename):
+                LOG.info('%s exists - creating unified diff' % filename)
+                old_data = open(filename).read()
+                timestamp_old = email.Utils.formatdate(timestamp,
+                        localtime=1)
+                timestamp_new = email.Utils.formatdate(time.time(),
+                        localtime=1)
+                diff = ''.join(difflib.unified_diff(
+                    old_data.splitlines(1),
+                    data.splitlines(1),
+                    '@',
+                    '@',
+                    timestamp_old,
+                    timestamp_new,
+                    ))
+                if len(diff) > 0:
+                    LOG.info('%s has changed - adding diff' % job)
+                    DETAILS += foutput('changed', job, diff, SUMMARY)
+                else:
+                    LOG.info('%s has not changed' % job)
+            else:
+                LOG.info('%s does not exist - is considered "new"'
+                         % filename)
+                DETAILS += foutput('new', job, None, SUMMARY)
+            LOG.info('writing current content of %s to %s' % (job,
+                     filename))
+            open(filename, 'w').write(data)
+        except urllib2.HTTPError, error:
+            if error.code == 304:
+                LOG.info('%s has not changed (HTTP 304)' % job)
+            else:
+                LOG.error('got HTTPError while loading url: %s' % error)
+                if DISPLAY_ERRORS:
+                    DETAILS += foutput('error', job, error, SUMMARY)
+        except handler.ShellError, error:
+            LOG.error('Shell returned %d' % error.result)
+            if DISPLAY_ERRORS:
+                DETAILS += foutput('error', job, error, SUMMARY)
+        except urllib2.URLError, error:
+            LOG.error('got URLError while loading url: %s' % error)
+            if DISPLAY_ERRORS:
+                DETAILS += foutput('error', job, error, SUMMARY)
+        except IOError, error:
+            LOG.error('got IOError while loading url: %s' % error)
+            if DISPLAY_ERRORS:
+                DETAILS += foutput('error', job, error, SUMMARY)
+        except socket.timeout, error:
+            LOG.error('got timeout while loading url: %s' % error)
+            if DISPLAY_ERRORS:
+                DETAILS += foutput('error', job, error, SUMMARY)
+        except httplib.error, error:
+
+            # This is to workaround a bug in urllib2, see
+            # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=529740
+
+            LOG.error('got httplib error while loading url: %s' % error)
+            if DISPLAY_ERRORS:
+                DETAILS += foutput('error', job, (repr(error) + '\n'
+                                   + str(error)).strip(), SUMMARY)
+
+        COUNT += 1
+
+    END = datetime.datetime.now()
+
+    # Output everything
+
+    if len(SUMMARY) > 1:
+        LOG.info('printing summary with %d items' % len(SUMMARY))
+        print '-' * LINE_LENGTH
+        print 'summary: %d changes' % (len(SUMMARY), )
+        print ''
+        for (id, line) in enumerate(SUMMARY):
+            print '%02d. %s' % (id + 1, line)
+        print '-' * LINE_LENGTH
+        print '''
+
+
+'''
+    else:
+        LOG.info('summary is too short - not printing')
+    if len(DETAILS) > 1:
+        LOG.info('printing details with %d items' % len(DETAILS))
+        print '\n'.join(DETAILS)
+        print '-- '
+        print '%s %s, %s' % (PKGNAME, __version__, __copyright__)
+        print 'Website: %s' % (__homepage__, )
+        print 'watched %d URLs in %d seconds\n' % (COUNT, (END
+                - START).seconds)
+    else:
+        LOG.info('no details collected - not printing')
+
