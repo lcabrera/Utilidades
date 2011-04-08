@@ -1,0 +1,18 @@
+Script de backup pensado para sistemas basados en Debian, donde se
+guarda la informaciÃ³n necesaria para la recuperaciÃ³n completa del
+sistema, tras una posible caida.
+
+El script almacena, de manera ordenada, toda la informaciÃ³n que se
+genera durante el backup en el directorio "/var/backups". Una vez
+ejecutado el script, se recomienda sacar una copia de todos los ficheros
+generados y almacenarla en una unidad externa.
+
+Para hacer que el script funcione, yo he puesto esta lÃ­nea en el
+crontab de mi root:
+
+# A las 2333:01h comienza el backup diario:
+01 23 * * *     /root/bin/backup.sh >/dev/null 2>&1 # Backup Diario
+
+Espero que sea suficiente.
+
+    Luis

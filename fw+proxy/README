@@ -1,0 +1,8 @@
+Script que permite reenviar el trÃ¡fico generado por una LAN interna,
+hacia un proxy.
+
+TODO:
+    * Compatibilizarlo con LSB e insserv
+    * Abstraer el ejecutable.
+    * Investigar si aÃ±adirle nuevas reglas de filtrado.
+
