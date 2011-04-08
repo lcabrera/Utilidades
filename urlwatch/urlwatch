@@ -32,7 +32,7 @@
 
 """Watch web pages and arbitrary URLs for changes"""
 
-PKGNAME = 'urlwatch'
+PKGNAME = pkgname = 'urlwatch'
 
 __author__ = 'Thomas Perl <m@thp.io>'
 __copyright__ = 'Copyright 2008-2011 Thomas Perl'
