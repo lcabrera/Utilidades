@@ -55,7 +55,8 @@ from reportlab.lib.pagesizes import A4
 
 from reportlab.lib import colors
 
-IMAGEN = '/home/lcabrera/Imágenes/CAFETERIA/Printer.Ticket.Logo.NUEVO_192x92.png'
+# IMAGEN = '/home/lcabrera/Imágenes/CAFETERIA/Printer.Ticket.Logo.NUEVO_192x92.png'
+IMAGEN = '/home/lcabrera/Imágenes/secure_lock.jpg'
 
 # Creamos un PageTemplate de ejemplo.
 
@@ -112,7 +113,7 @@ story.append(Spacer(0, 20))
 # Ahora incluimos una imagen.
 
 fichero_imagen = IMAGEN
-imagen_logo = Image(os.path.realpath(fichero_imagen), width=192, height=192)
+imagen_logo = Image(os.path.realpath(fichero_imagen), width=192, height=92)
 story.append(imagen_logo)
 
 # Dejamos algo de espacio:
