@@ -55,39 +55,21 @@ mes_sp = [
     ]
 
 hoy = '%s %d' % (mes_sp[mes - 1], dia.tm_year)
+
 nombrefichero = 'Ejemplo-Reportlab.pdf'
 
 # ~
 # ~                                 C O N F I G U R A N D O    L A S   F U E N T E S
 # ~
 
-pdfmetrics.registerFont(TTFont('DejaVu',
-                        '/usr/share/fonts/truetype/ttf-dejavu//DejaVuSans.ttf'
-                        ))
-
+pdfmetrics.registerFont(TTFont('DejaVu', '/usr/share/fonts/truetype/ttf-dejavu//DejaVuSans.ttf'))
 # pdfmetrics.registerFont(TTFont('DejaVuBd', '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansBold.ttf'))
-
-pdfmetrics.registerFont(TTFont('DejaVuBd',
-                        '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf'
-                        ))
-
+pdfmetrics.registerFont(TTFont('DejaVuBd', '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf'))
 # pdfmetrics.registerFont(TTFont('DejaVuBdIt', '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansBoldOblique.ttf'))
-
-pdfmetrics.registerFont(TTFont('DejaVuBdIt',
-                        '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf'
-                        ))
-
+pdfmetrics.registerFont(TTFont('DejaVuBdIt', '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf'))
 # pdfmetrics.registerFont(TTFont('DejaVuIt', '/usr/share/fonts/truetype/ttf-dejavu/DejaVuCondensedSansOblique.ttf'))
-
-pdfmetrics.registerFont(TTFont('DejaVuIt',
-                        '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf'
-                        ))
-registerFontFamily(
-        'Dejavu',
-        normal='DejaVu',
-        bold='DejaVuBd',
-        italic='DejaVuIt',
-        boldItalic='DejaVuBdIt')
+pdfmetrics.registerFont(TTFont('DejaVuIt', '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf'))
+registerFontFamily('Dejavu', normal='DejaVu', bold='DejaVuBd', italic='DejaVuIt', boldItalic='DejaVuBdIt')
 
 # ~
 # ~                                  E S T A B L E C I E N D O   L O S   E S T I L O S
