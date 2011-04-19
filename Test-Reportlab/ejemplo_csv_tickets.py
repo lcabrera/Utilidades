@@ -18,14 +18,15 @@ from reportlab.lib import colors
 from reportlab.lib.units import inch
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import LETTER
+from reportlab.lib.pagesizes import A4
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.rl_config import defaultPageSize
 from reportlab.lib.units import inch, mm
 from reportlab.graphics.barcode import code39
 
-PAGE_HEIGHT= 11 * inch
-PAGE_WIDTH= 8.5 * inch
+PAGE_HEIGHT = 11 * inch
+PAGE_WIDTH = 8.5 * inch
 styles = getSampleStyleSheet()
 Title = "ELS Graduation Regalia Checklist"
 
