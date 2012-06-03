@@ -1,0 +1,16 @@
+MODELO 22
+PCC (5B, 6B): mantenimiento de la comida preparada (temperatura ºC)
+Mantenimiento en frío Mantenimiento en caliente
+Fecha
+MF1 MF2 MF3 MC1 MC2 MC3
+Vigilado por (firma)
+Observaciones: Verificado por (firma y fecha):
+Instrucciones para cumplimentar la tabla:
+Fecha: fecha de comprobación de la temperatura de los equipos de mantenimiento de las comidas preparadas.
+Mantenimiento en frío/Mantenimiento en caliente: identificación de la mesa caliente o cámara donde se realiza la medición.
+MF1/MF2/MF3/MC1/MC2/MC3: temperatura ambiental reflejada en el visor del equipo de frío (MF) o de la mesa caliente (MC) donde se realiza la medición (cada equipo estará identificado según
+tipo de producto).
+Vigilado por (firma): firma o iniciales de la persona que hace la vigilancia y cumplimenta el registro.
+Observaciones: breve descripción de cualquier incidencia o comentario de interés.
+Verificado por/fecha: firma o iniciales del responsable del sistema APPCC que comprueba la realización de las actividades conforme a lo establecido en el sistema y la correcta
+cumplimentación de los registros.

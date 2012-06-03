@@ -1,0 +1,17 @@
+Local:
+    - Zona Elaboración:
+        - Descripción: ["Descripción de esta zona"]
+        - Local:
+            - Suelos:
+                - Descripcion: ["Descripción de esta caracteristica..."]
+                - Prioridad: [1]
+                - Dias:
+                    - [1, 2, 3, 4, 5]
+            - Techos: [1, 2, 3, 4, 5]
+            - Puertas: [1, 2, 3, 4, 5]
+    - Zona Publica
+    - Almacen
+    - Aseos
+
+#Segundo local
+Local 2:

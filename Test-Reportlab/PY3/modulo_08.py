@@ -1,0 +1,531 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+#  This file is part of this project
+#
+# Copyright (C) 2011 Luis Cabrera <>
+#
+#  This library is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU Library General Public
+#  License as published by the Free Software Foundation; either
+#  version 2 of the License, or (at your option) any later version.
+#
+#  This library is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  Library General Public License for more details.
+#
+#  You should have received a copy of the GNU Library General Public License
+#  along with this library; see the file COPYING.LIB.  If not, write to
+#  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+#  Boston, MA 02110-1301, USA.
+#
+
+
+"""
+# ~ código creado por: monobot.soft@gmail.com
+# (www.alvarezalonso.es/monobotblog)
+# ~ code by: monobot.soft@gmail.com
+# (www.alvarezalonso.es/monobotblog)
+"""
+
+from reportlab.platypus import BaseDocTemplate
+from reportlab.platypus import Paragraph
+from reportlab.platypus import Spacer
+from reportlab.platypus import Frame
+from reportlab.platypus import PageTemplate
+from reportlab.platypus import PageBreak
+from reportlab.platypus import NextPageTemplate
+from reportlab.platypus import Table, TableStyle
+from reportlab.lib.styles import ParagraphStyle
+from reportlab.graphics.shapes import Rect
+from reportlab.lib.colors import tan
+
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import A3
+from reportlab.lib.pagesizes import A2
+from reportlab.lib.pagesizes import A1
+from reportlab.lib.pagesizes import A0
+from reportlab.lib.pagesizes import landscape
+from reportlab.lib.pagesizes import portrait
+from reportlab.lib.units import cm
+
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfbase.pdfmetrics import registerFontFamily
+
+import os
+import time
+import sys
+from sys import modules as modules
+from PIL import Image
+
+import modulo_08_data
+
+# ~
+# ~              D A T O S   G E N E R A L E S
+# ~              V A R I A B L E S
+# ~
+
+#PAGINA = landscape(A4)
+PAGINA = A3
+EMAIL = 'lcabrera@sauco.org'
+TITULO = 'Título de las pruebas'
+SUBTITULO = 'Subtítulo de las pruebas'
+TEMA = 'Pruebas sobre ReportLab'
+AUTOR = 'Luis Cabrera Sauco'
+PRODUCER = 'ReportLab y mucha paciencia'
+KEYWORDS = 'ReportLab, PDF, Informes, etc'
+
+LEFTMARGIN = 1 * cm
+RIGHTMARGIN = 1 * cm
+TOPMARGIN = 1 * cm
+BOTTONMARGIN = 1 * cm
+
+EST_ = ''
+FUENTE = 'DejaVu'
+try:
+    NOMBRE_FICHERO = sys.argv[1]
+except IndexError:
+    NOMBRE_FICHERO = 'modelo_08.pdf'
+
+ALTURA_PAGINA = PAGINA[1]
+#ALTURA_PAGINA = 29.7 * cm
+#ALTURA_PAGINA = 841.88976377952747
+ANCHURA_PAGINA = PAGINA[0]
+#ANCHURA_PAGINA = 21 * cm
+#ANCHURA_PAGINA = 595.27559055118104
+
+# MODULO_ACTUAL = modules[__name__]
+
+# ~ DIA DE HOY Y CONVERTIRLO A ESPAÑOL
+DIA = time.localtime()
+MES = DIA.tm_mon
+MES_SP = [
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre', ]
+
+HOY = '%s %d' % (MES_SP[MES - 1], DIA.tm_year)
+# NOMBRE_FICHERO = 'monobotblog.pdf'
+
+# ~
+# ~         C O N F I G U R A N D O    L A S   F U E N T E S
+# ~
+
+pdfmetrics.registerFont(TTFont('DejaVu',
+    '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf'))
+pdfmetrics.registerFont(TTFont('DejaVuBd',
+    '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans-Bold.ttf'))
+pdfmetrics.registerFont(TTFont('DejaVuBdIt',
+    '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans-Oblique.ttf'))
+pdfmetrics.registerFont(TTFont('DejaVuIt',
+    '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed-Oblique.ttf'))
+registerFontFamily(
+    'Dejavu',
+    normal='DejaVu',
+    bold='DejaVuBd',
+    italic='DejaVuIt',
+    boldItalic='DejaVuBdIt')
+
+# ~
+# ~          E S T A B L E C I E N D O   L O S   E S T I L O S
+# ~
+# ~              P A R R A F O S
+# ~
+
+EST_1 = ParagraphStyle('', fontName=FUENTE, fontSize=12, alignment=0)
+EST_2 = ParagraphStyle('', fontName=FUENTE, fontSize=8, alignment=0)
+EST_3 = ParagraphStyle(
+    '',
+    fontName=FUENTE,
+    fontSize=6,
+    alignment=0,
+    leftIndent=cm,
+    bulletIndent=0.5 * cm, )
+
+# ~
+# ~              T A B L A S
+# ~
+
+TIPOTABLA_MODERNA = TableStyle([
+    ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
+    ('TOPPADDING', (0, 0), (-1, -1), 1),
+    ('LEFTPADDING', (0, 0), (-1, -1), 3),
+    ('RIGHTPADDING', (0, 0), (-1, -1), 3),
+    ('FONT', (0, 0), (-1, -1), FUENTE, 8),
+    ('GRID', (0, 0), (-1, -1), 0.01 * cm, 'Black'),
+    ('FONT', (0, 0), (0, -1), FUENTE, 15),
+    ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+    ('ALIGN', (0, 0), (0, -1), 'RIGHT'),
+    ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+    ('SPAN', (0, 0), (0, -1)),
+    ('REPEAROWS', (0, 0), (1, -1)),
+    ])
+
+TIPOTABLA_LIMPIA = TableStyle([
+    ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
+    ('TOPPADDING', (0, 0), (-1, -1), 1),
+    ('LEFTPADDING', (0, 0), (-1, -1), 3),
+    ('RIGHTPADDING', (0, 0), (-1, -1), 3),
+    ('TEXTCOLOR', (0, 0), (-1, -1), 'Grey'),
+    ('FONT', (0, 0), (-1, -1), FUENTE, 10),
+    ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+    ('ALIGN', (-1, 0), (-1, -1), 'RIGHT'),
+    ('ALIGN', (1, 0), (1, -1), 'CENTER'),
+    ])
+
+ESTILO_GENERAL = TableStyle([
+    ('GRID', (0, 0), (-1, -1), 0.05 * cm, 'Silver'),
+    ## 0
+    ('SPAN', (0, 0), (-1, 0)),
+    ## 1
+    ('SPAN', (0, 1), (-15, 1)),
+    ('SPAN', (-14, 1), (-13, 1)), ('SPAN', (-12, 1), (-8, 1)),
+    ('SPAN', (-7, 1), (-6, 1)), ('SPAN', (-5, 1), (-1, 1)),
+    ## 2
+    ('SPAN', (0, 2), (-32, 2)), ])
+
+##############################################################################
+#def buildDocTemplate(fname, indexer):
+#    dt = BaseDocTemplate(fname)
+#    sb = 0
+#
+#    address = Frame(dt.leftMargin + 8*cm, PAGINA[1] - 9.5*cm, 7*cm, 4*cm, id = 'address', showBoundary = sb)
+#    additional = Frame(0, PAGINA[1] - 5.6*cm, 7*cm, 1*cm, id = 'additional', showBoundary = sb)
+#    summary = Frame(1*cm, 1*cm, PAGINA[1] - 2*cm, PAGINA[0] - 2*cm, id = 'summary', showBoundary= sb)
+#    bollettini1 = Frame(-0.55*cm, (PAGINA[0] / 2) + 0.15*cm, PAGINA[1], PAGINA[0]/2 - 1*cm, id = 'bollettini1', showBoundary = sb)
+#    bollettini2 = Frame(-0.55*cm, 0.2*cm, PAGINA[1], PAGINA[0]/2 - 1.4*cm, id = 'bollettini2', showBoundary = sb)
+#
+#    dt.addPageTemplates(
+#    	[
+#    		 PageTemplate(id='address',    frames=[additional,address],                         onPageEnd=indexer.addressPage),
+#            PageTemplate(id='summary',    frames=summary,                   onPage=_landscape, onPageEnd=indexer.summaryPage),
+#            PageTemplate(id='bollettini', frames=[bollettini1,bollettini2], onPage=_landscape, onPageEnd=indexer.ccpPage),
+#       ])
+#
+#    return dt
+##############################################################################
+
+# ~
+# ~              C A N V A S
+# ~
+def pagina_cabecera(canvas, hoja_moderna):
+    '''Definición de estilo de página.'''
+
+    canvas.saveState()
+    canvas.setFont(FUENTE, 5)
+    canvas.drawRightString(ANCHURA_PAGINA - 1 * cm, ALTURA_PAGINA - 1 * cm, '%s' % HOY)
+    canvas.drawRightString(ANCHURA_PAGINA - 1 * cm, ALTURA_PAGINA - 1.2 * cm, EMAIL)
+    canvas.setFont(FUENTE, 15)
+    canvas.drawString(4.7 * cm, ALTURA_PAGINA - 1.5 * cm, TITULO)
+    canvas.restoreState()
+
+
+def resto_paginas(canvas, hoja_moderna):
+    '''Definición de estilo de página.'''
+
+    canvas.saveState()
+    canvas.setFont(FUENTE, 5)
+    canvas.drawRightString(ANCHURA_PAGINA - 1 * cm, ALTURA_PAGINA - 1 * cm, '%s' % HOY)
+    canvas.drawRightString(ANCHURA_PAGINA - 1 * cm, ALTURA_PAGINA - 1.2 * cm, EMAIL)
+    canvas.setFont(FUENTE, 15)
+    canvas.drawString(4.7 * cm, ALTURA_PAGINA - 1.5 * cm, SUBTITULO)
+    canvas.setFont(FUENTE, 8)
+    canvas.drawCentredString(ANCHURA_PAGINA/2, 0.75 * cm, "%d" % (hoja_moderna.page))
+    canvas.restoreState()
+
+def _landscape(canvas, hoja_moderna):
+    '''Snippet para generar páginas apaisadas.'''
+
+    #canvas.saveState()
+    canvas.rotate(90)
+    canvas.translate(0, -PAGINA[0])
+    canvas.setFont(FUENTE, 8)
+    canvas.drawCentredString(ALTURA_PAGINA/2, 0.60 * cm, "%d" % (hoja_moderna.page))
+    #canvas.restoreState()
+
+# ~
+# ~              F R A M E S
+# ~
+
+# REFACTORIZAR USANDO:
+# ~~~~~~~~~~~~~~~~~~~~
+# LEFTMARGIN = 1 * cm
+# RIGHTMARGIN = -3 * cm
+# TOPMARGIN = 1 * cm
+# BOTTONMARGIN = 1 * cm
+
+# Corto, para portadas o similares:
+FRAME_CORTO = Frame(
+    x1 = 1 * cm,
+    y1 = 1 * cm,
+    width = ANCHURA_PAGINA - 2 * cm,
+    height = ALTURA_PAGINA - 10 * cm,
+    showBoundary = 0)
+
+# Normal, para páginas normales:
+FRAME_NORMAL = Frame(
+    x1 = 1 * cm,
+    y1 = 1 * cm,
+    width = ANCHURA_PAGINA - 2 * cm,
+    height = ALTURA_PAGINA - 4 * cm,
+    showBoundary = 0)
+
+# Apaisado, para tablas y gráficos pesados:
+FRAME_APAISADO = Frame(
+    x1 = 1 * cm,
+    y1 = 1 * cm,
+    width = ALTURA_PAGINA - 2 * cm,
+    height = ANCHURA_PAGINA - 2 * cm,
+    showBoundary = 1)
+
+# ~
+# ~              P A G I N A S
+# ~
+PORTADA = PageTemplate(
+    id = '1era_pag',
+    frames = FRAME_CORTO,
+    onPage = pagina_cabecera)
+
+RESTO_PAGINAS = PageTemplate(
+    id = 'resto',
+    frames = FRAME_NORMAL,
+    onPage = resto_paginas)
+
+PAGINAS_APAISADAS = PageTemplate(
+    id = 'apaisada',
+    frames = FRAME_APAISADO,
+    onPage = _landscape)
+
+# ~
+# ~ estilos DE DOCUMENTOS
+# ~
+
+HOJA_MODERNA = BaseDocTemplate(
+    NOMBRE_FICHERO,
+    pagesize = PAGINA,
+    pageTemplates = [PAGINAS_APAISADAS, PORTADA, RESTO_PAGINAS],
+    showBoundary = 0,
+    leftMargin = LEFTMARGIN,
+    rightMargin = RIGHTMARGIN,
+    topMargin = TOPMARGIN,
+    bottomMargin = BOTTONMARGIN,
+    allowSplitting = 1,
+    title = TITULO,
+    subject = TEMA,
+    author = AUTOR,
+    producer = PRODUCER,
+    keywords = KEYWORDS,
+    _pageBreakQuick = 1,
+    encrypt = None)
+
+# ~
+# ~      C R E A M O S   E L   C U E R P O   D E L   M E N S A J E
+# ~  Y   A Ñ A D I M O S  T E X T O  P A R A  P R U E B A S
+# ~
+
+CUERPO = []
+PARRAFO_P1 = Paragraph('Este es el texto del parrafo 1' * 50, EST_1)
+PARRAFO_P2 = Paragraph('Este es el texto del parrafo 2' * 50, EST_2)
+PARRAFO_P3 = Paragraph('Este es el texto del parrafo 3' * 50, EST_3)
+
+#CUERPO.append(PARRAFO_P1)
+#CUERPO.append(Spacer(0, 1 * cm))
+#CUERPO.append(PARRAFO_P2)
+#CUERPO.append(NextPageTemplate('resto'))
+#CUERPO.append(PageBreak())
+#CUERPO.append(PARRAFO_P3)
+#CUERPO.append(Spacer(0, 2 * cm))
+
+DATA_T1 = [
+    ['00', '10', '20', '30', '...'],
+    ['01', '11', '21', '...', '...'],
+    ['02', '12', '...', '...', '-1-4'],
+    ['03', '...', '...', '-2-3', '-1-3'],
+    ['...', '...', '-3-2', '-2-2', '-1-2'],
+    ['...', '-4-1', '-3-1', '-2-1', '-1-1'], ]
+
+TABLA_T1 = Table(DATA_T1, style = TIPOTABLA_LIMPIA)
+
+#CUERPO.append(TABLA_T1)
+
+#CUERPO.append(Spacer(0, 2 * cm))
+
+DATA_T2 = [
+    ['Hola', 'Hola', 'Hola', 'Hola', 'Hola', 'Hola', 'Hola', ],
+    ['Hola', 'Hola', 'Hola', 'Hola', 'Hola', 'Hola', 'Hola', ],
+    ['Hola', 'Hola', 'Hola', 'Hola', 'Hola', 'Hola', 'Hola', ],
+    ['Hola', 'Hola', 'Hola', 'Hola', 'Hola', 'Hola', 'Hola', ],
+    ['Hola', 'Hola', 'Hola', 'Hola', 'Hola', 'Hola', 'Hola', ],
+    ['Hola', 'Hola', 'Hola', 'Hola', 'Hola', 'Hola', 'Hola', ], ]
+
+TABLA_T2 = Table(DATA_T2, style = TIPOTABLA_MODERNA)
+
+#CUERPO.append(TABLA_T2)
+
+# Añadido para probar paginas apaisadas
+#CUERPO.append(NextPageTemplate('apaisada'))
+#CUERPO.append(PageBreak())
+# CUERPO.append(PARRAFO_P1)
+# CUERPO.append(Spacer(0, 1 * cm))
+
+
+TABLAS = []
+###############################################################################
+## TABLA 1
+########################################################################M_08_COL = 34
+# Importamos los datos para esta tabla:
+M08_T01_DATA = modulo_08_data.M08_T01_DATA
+
+# Definimos las características de la tabla
+# Table(
+#   data,
+#   colWidths=None,
+#   rowHeights=None,
+#   style=None,
+#   splitByRow=1,
+#   repeatRows=0,
+#   repeatCols=0)
+
+M08_T01 = Table(
+        M08_T01_DATA,
+        #colWidths=((ANCHURA_PAGINA - (LEFTMARGIN + RIGHTMARGIN)) / M_08_COL),
+        colWidths=None,
+        splitByRow=1,
+        repeatRows=3)
+
+# Añadimos el estilo general:
+M08_T01.setStyle(ESTILO_GENERAL)
+
+# Ahora, añadimos los estilos particulares de cada tabla:
+M08_T01.setStyle([
+    ('SPAN', (0, 3), (-32, 3)),
+    ('SPAN', (0, 12), (-32, 12)),
+    ('SPAN', (0, 18), (-32, 18)),
+    ('SPAN', (0, 31), (-32, 31)), ])
+
+########################################################################
+## TABLA 2
+########################################################################
+M_08_COL = 34
+M08_T02_DATA = modulo_08_data.M08_T02_DATA
+M08_T02 = Table(
+        M08_T02_DATA,
+        colWidths=None,
+        splitByRow=1,
+        repeatRows=3)
+M08_T02.setStyle(ESTILO_GENERAL)
+M08_T02.setStyle([
+## 3
+#('SPAN', (0, 3), (-33, 3)),
+])
+
+########################################################################
+## TABLA 3
+########################################################################
+M_08_COL = 34
+M08_T03_DATA = modulo_08_data.M08_T03_DATA
+M08_T03 = Table(
+        M08_T03_DATA,
+        colWidths=None,
+        splitByRow=1,
+        repeatRows=3)
+M08_T03.setStyle(ESTILO_GENERAL)
+M08_T03.setStyle([])
+
+########################################################################
+## TABLA 4
+########################################################################
+M_08_COL = 34
+M08_T04_DATA = modulo_08_data.M08_T04_DATA
+M08_T04 = Table(
+        M08_T04_DATA,
+        colWidths=None,
+        splitByRow=1,
+        repeatRows=3)
+M08_T04.setStyle(ESTILO_GENERAL)
+M08_T04.setStyle([])
+
+########################################################################
+## TABLA 5
+########################################################################
+#M_08_COL = 34
+M08_T05_DATA = modulo_08_data.M08_T05_DATA
+M08_T05 = Table(
+        M08_T05_DATA,
+        colWidths=None,
+        splitByRow=1,
+        repeatRows=3)
+#M08_T05.setStyle(ESTILO_GENERAL)
+M08_T05.setStyle([
+    ('GRID', (0, 0), (-1, -1), 0.05 * cm, 'Silver'),
+    ('SPAN', (0, 0), (-11, 0)), ('SPAN', (-10, 0), (-1, 0)),
+    ('SPAN', (0, 1), (-11, 1)), ('SPAN', (-10, 1), (-1, 1)),
+    ])
+
+########################################################################
+## TABLA 6
+########################################################################
+#M_08_COL = 34
+#normal = ParagraphStyle('styleSheet')
+#ANOTACIONES = []
+#CUERPO.append(Paragraph(modulo_08_data.M08_T06_DATA, normal))
+#CUERPO.append(Table(ANOTACIONES))
+#CUERPO.append(PageBreak())
+#CUERPO.append(Spacer(0, .2 * cm))
+########################################################################
+
+
+
+
+
+
+# Añadimos la tabla 1 al workflow de la página:
+CUERPO.append(M08_T01)
+CUERPO.append(Spacer(0, .2 * cm))
+CUERPO.append(M08_T05)
+CUERPO.append(PageBreak())
+CUERPO.append(M08_T02)
+CUERPO.append(Spacer(0, .2 * cm))
+CUERPO.append(M08_T05)
+CUERPO.append(PageBreak())
+CUERPO.append(M08_T03)
+CUERPO.append(Spacer(0, .2 * cm))
+CUERPO.append(M08_T04)
+CUERPO.append(Spacer(0, .2 * cm))
+CUERPO.append(M08_T05)
+
+#CUERPO.append(PageBreak())
+#CUERPO.append(PageBreak())
+#CUERPO.append(Spacer(0, .2 * cm))
+
+
+
+
+
+
+
+
+
+
+
+def construir_pdf():
+    '''Lanzamos el código.'''
+
+    HOJA_MODERNA.build(CUERPO)
+    # Lanzar un visor de pdf
+    # os.startfile(NOMBRE_FICHERO)
+
+
+if __name__ == '__main__':
+    construir_pdf()

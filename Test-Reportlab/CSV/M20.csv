@@ -1,0 +1,17 @@
+MODELO 20
+PCC (2B, 4B): almacenamiento frigorífico de ingredientes y comidas preparadas (temperatura ºC)
+R1 R2 R3 R4 C1 C2
+Fecha
+T1 T2 T1 T2 T1 T2 T1 T2 T1 T2 T1 T2
+Vigilado por
+(firma)
+Observaciones: Verificado por
+(firma y fecha):
+Instrucciones para cumplimentar la tabla:
+Fecha: fecha de comprobación de la temperatura de las cámaras de frío.
+R1/R2 /R3 /R4/ C1/C2: identificación de la cámara frigorífica según tipo de producto (R: refrigeración, C: congelación).
+T1/T2: temperatura ambiente de la cámara reflejada en el visor de la misma.
+Vigilado por (firma): firma o iniciales de la persona que hace la vigilancia y cumplimenta el registro.
+Observaciones: breve descripción de cualquier incidencia o comentario de interés.
+Verificado por/fecha: firma o iniciales del responsable del sistema APPCC que comprueba la realización de las actividades conforme a lo establecido en el plan y la correcta cumplimentación de
+los registros.
