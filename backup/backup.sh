@@ -58,7 +58,7 @@ EXCLUDE="--exclude=\"*.iso\" --exclude=\"*.mp3\" --exclude=\"*.avi\" --exclude=\
 ( mv /tmp/09-pg_dumpall.sql ${BACKUP}/ ) > /dev/null 2>&1
 
 # MYSQL: Backup de todas las bases de datos
-( mysqldump --all-databases --single-transaction > ${BACKUP}/10-all_databases.sql ) > /dev/null 2>&1
+( mysqldump  --max_allowed_packet=1G --all-databases --single-transaction > ${BACKUP}/10-all_databases.sql ) > /dev/null 2>&1
 
 # Las copias de todo lo anterior, solo han de ser legibles por root
 /bin/chown root:root ${BACKUP}/*
