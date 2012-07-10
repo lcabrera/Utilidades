@@ -25,7 +25,7 @@ BACKUP=/var/backups
 EXCLUDE="--exclude=\"*.iso\" --exclude=\"*.mp3\" --exclude=\"*.avi\" --exclude=\"*.mpg\""
 
 # Copia del listado de paquetes del sistema:
-( /usr/bin/dpkg --get-selections > ${BACKUP}/00-dpkg_selections ) > /dev/null 2>&1
+( /usr/bin/dpkg --get-selections | grep '[[:space:]]install$'| awk '{print $1}' > ${BACKUP}/00-dpkg_selections ) > /dev/null 2>&1
 
 # Copia de los cron del sistema:
 ( /bin/tar  ${EXCLUDE} -c -f ${BACKUP}/01-cron.tar /var/spool/cron ) > /dev/null 2>&1
